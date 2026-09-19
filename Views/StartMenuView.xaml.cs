@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -17,32 +18,41 @@ namespace KamiinaBotan.Views
 {
     public partial class StartMenuView : UserControl
     {
-        private readonly Storyboard _zoomAndFlashIn;
-        private readonly Storyboard _flashOut;
+        private readonly Storyboard _pourIn;
+        private readonly Storyboard _pourOut;
+        private readonly Storyboard _waveLoop;
         private bool _isTransitioning;
         public StartMenuView()
         {
             InitializeComponent();
-            _zoomAndFlashIn = (Storyboard)Resources["ZoomAndFlashIn"];
-            _flashOut = (Storyboard)Resources["FlashOut"];
-            _zoomAndFlashIn.Completed += OnFlashInCompleted;
-            _flashOut.Completed += OnFlashOutCompleted;
+            _pourIn = (Storyboard)Resources["PourIn"];
+            _pourOut = (Storyboard)Resources["PourOut"];
+            _waveLoop = (Storyboard)Resources["WaveLoop"];
+            _pourIn.Completed += OnPourInCompleted;
+            _pourOut.Completed += OnPourOutCompleted;
         }
         private void ClickArea_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (_isTransitioning) return;
             _isTransitioning = true;
-            _zoomAndFlashIn.Begin(this, true);
+            Liquid.Visibility = Visibility.Visible;
+            Scene.Effect = new BlurEffect { Radius = 0 };
+            _waveLoop.Begin(this, true);
+            _pourIn.Begin(this, true);
         }
-        private void OnFlashInCompleted(object? sender, EventArgs e)
+        private void OnPourOutCompleted(object? sender, EventArgs e)
+        {
+            _pourIn.Stop(this);
+            _pourOut.Stop(this);
+            _waveLoop.Stop(this);
+            Scene.Effect = null;
+            Liquid.Visibility = Visibility.Collapsed;
+            _isTransitioning = false;
+        }
+        private void OnPourInCompleted(object? sender, EventArgs e)
         {
             (DataContext as StartMenuViewModel)?.TapToStartCommand.Execute(null);
-            _flashOut.Begin(this);
-        }
-        private void OnFlashOutCompleted(object? sender, EventArgs e)
-        {
-            _zoomAndFlashIn.Stop(this);
-            _isTransitioning = false;
+            _pourOut.Begin(this, true);
         }
     }
 }
