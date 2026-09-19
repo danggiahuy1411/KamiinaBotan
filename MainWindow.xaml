@@ -1,0 +1,33 @@
+﻿<Window x:Class="KamiinaBotan.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:KamiinaBotan.ViewModels"
+        xmlns:views="clr-namespace:KamiinaBotan.Views"
+        Title="Kamiina Botan" Height="720" Width="1280"
+        MinWidth="480" MinHeight="270"
+        Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:StartMenuViewModel}">
+            <views:StartMenuView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:StageMenuViewModel}">
+            <views:StageMenuView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TeamMenuViewModel}">
+            <views:TeamMenuView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BattlefieldViewModel}">
+            <views:BattlefieldView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ResultViewModel}">
+            <views:ResultView/>
+        </DataTemplate>
+    </Window.Resources>
+    <Viewbox Stretch="Uniform">
+        <Grid Width="1280" Height="720">
+            <ContentControl Content="{Binding CurrentViewModel}"/>
+        </Grid>
+    </Viewbox>
+</Window>
