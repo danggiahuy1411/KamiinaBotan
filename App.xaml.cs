@@ -13,6 +13,8 @@ public partial class App : Application
         try
         {
             var services = new ServiceCollection();
+            services.AddSingleton<TransitionService>();
+            services.AddSingleton<ITransitionService>(sp => sp.GetRequiredService<TransitionService>());
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<MainViewModel>();
             services.AddTransient<StartMenuViewModel>();
@@ -20,12 +22,11 @@ public partial class App : Application
             services.AddTransient<TeamMenuViewModel>();
             services.AddTransient<BattlefieldViewModel>();
             services.AddTransient<ResultViewModel>();
-            Services = services.BuildServiceProvider();
 
-            var mainWindow = new MainWindow
-            {
-                DataContext = Services.GetRequiredService<MainViewModel>()
-            };
+            Services = services.BuildServiceProvider();
+            var mainWindow = new MainWindow(
+                Services.GetRequiredService<MainViewModel>(),
+                Services.GetRequiredService<TransitionService>());
             mainWindow.Show();
         }
         catch (Exception ex)

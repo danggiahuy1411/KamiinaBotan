@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:KamiinaBotan.ViewModels"
         xmlns:views="clr-namespace:KamiinaBotan.Views"
+        xmlns:controls="clr-namespace:KamiinaBotan.Controls"
         Title="Kamiina Botan" Height="720" Width="1280"
         MinWidth="480" MinHeight="270"
         Background="AntiqueWhite"
@@ -27,7 +28,8 @@
     </Window.Resources>
     <Viewbox Stretch="Uniform">
         <Grid Width="1280" Height="720">
-            <ContentControl Content="{Binding CurrentViewModel}"/>
+            <ContentControl x:Name="ContentHost" Content="{Binding CurrentViewModel}"/>
+            <controls:TransitionOverlay x:Name="Transition"/>
         </Grid>
     </Viewbox>
 </Window>

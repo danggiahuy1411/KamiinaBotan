@@ -10,6 +10,7 @@ namespace KamiinaBotan.ViewModels
     {
         public string BackgroundPath => "pack://application:,,,/images/StartScreen.jpg";
         private readonly INavigationService _navigation;
+        private readonly ITransitionService _transition;
         private static bool _isStartVisible = true;
         public bool IsStartVisible
         {
@@ -22,13 +23,22 @@ namespace KamiinaBotan.ViewModels
         public RelayCommand SettingsCommand { get; }
         public RelayCommand ExitCommand { get; }
 
-        public StartMenuViewModel(INavigationService navigation)
+        public StartMenuViewModel(INavigationService navigation, ITransitionService transition)
         {
             _navigation = navigation;
-            TapToStartCommand = new RelayCommand(_ => IsStartVisible = false);
+            _transition = transition;
+
+            TapToStartCommand = new RelayCommand(async _ => await TapToStartAsync());
             PlayCommand = new RelayCommand(_ => _navigation.NavigateTo<StageMenuViewModel>());
             SettingsCommand = new RelayCommand(_ => { /* TODO: settings overlay */ });
-            ExitCommand = new RelayCommand(_ => Application.Current.Shutdown());
+            ExitCommand = new RelayCommand(async _ => await ExitAsync());
+        }
+        private Task TapToStartAsync() => _transition.PlayAsync(() => IsStartVisible = false);
+        private async Task ExitAsync()
+        {
+            await _transition.CoverAsync();
+            await Task.Delay(150);
+            Application.Current.Shutdown();
         }
     }
 }

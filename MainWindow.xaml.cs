@@ -1,5 +1,7 @@
-﻿using KamiinaBotan.ViewModels;
+﻿using KamiinaBotan.Services;
+using KamiinaBotan.ViewModels;
 using System.Text;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,6 +24,13 @@ namespace KamiinaBotan
         {
             InitializeComponent();
             DataContext = viewModel;
+        }
+        public MainWindow(MainViewModel vm, TransitionService transition)
+        {
+            InitializeComponent();
+            DataContext = vm;
+            Transition.BlurTarget = ContentHost;
+            transition.Attach(Transition);
         }
     }
 }

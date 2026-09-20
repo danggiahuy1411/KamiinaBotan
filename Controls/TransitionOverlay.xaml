@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="KamiinaBotan.Controls.TransitionOverlay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="1280" Height="720" Visibility="Collapsed">
+    <UserControl.Resources>
+        <Geometry x:Key="WaveGeometry">M0,20 Q80,12 160,20 T320,20 T480,20 T640,20 T800,20 T960,20 T1120,20 T1280,20 T1440,20 T1600,20 T1760,20 T1920,20 L1920,900 L0,900 Z</Geometry>
+        <Storyboard x:Key="PourIn">
+            <DoubleAnimation Storyboard.TargetName="LiquidY" Storyboard.TargetProperty="Y"
+                         From="860" To="-60" Duration="0:0:1.30">
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseInOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Key="PourOut">
+            <DoubleAnimation Storyboard.TargetName="LiquidY" Storyboard.TargetProperty="Y"
+                         To="860" BeginTime="0:0:0.10" Duration="0:0:1.10">
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Key="WaveLoop">
+            <DoubleAnimation Storyboard.TargetName="BeerX" Storyboard.TargetProperty="X"
+                     From="0" To="-320" Duration="0:0:1.1" RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="FoamX" Storyboard.TargetProperty="X"
+                     From="-640" To="-320" Duration="0:0:4" RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="BubbleAY" Storyboard.TargetProperty="Y"
+                     From="0" To="-80" Duration="0:0:1.0" RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="BubbleBY" Storyboard.TargetProperty="Y"
+                     From="0" To="-160" Duration="0:0:1.5" RepeatBehavior="Forever"/>
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Canvas x:Name="Liquid" Background="Transparent" ClipToBounds="True" Opacity="0.92">
+        <Canvas x:Name="LiquidGroup">
+            <Canvas.RenderTransform>
+                <TranslateTransform x:Name="LiquidY" Y="860"/>
+            </Canvas.RenderTransform>
+
+            <Path Data="{StaticResource WaveGeometry}" Canvas.Top="-100">
+                <Path.Fill>
+                    <LinearGradientBrush MappingMode="Absolute" StartPoint="0,20" EndPoint="0,125">
+                        <GradientStop Color="#FFFFFF" Offset="0"/>
+                        <GradientStop Color="#FFF9EA" Offset="0.55"/>
+                        <GradientStop Color="#FBE8B5" Offset="0.85"/>
+                        <GradientStop Color="#F2CF78" Offset="1"/>
+                    </LinearGradientBrush>
+                </Path.Fill>
+                <Path.RenderTransform>
+                    <TranslateTransform x:Name="FoamX" X="-640"/>
+                </Path.RenderTransform>
+            </Path>
+
+            <Rectangle Canvas.Top="-72" Width="1280" Height="112">
+                <Rectangle.Fill>
+                    <DrawingBrush TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,30,24"
+                          ViewboxUnits="Absolute" Viewbox="0,0,30,24"
+                          RenderOptions.CachingHint="Cache">
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing Brush="#30FFFFFF">
+                                <GeometryDrawing.Pen>
+                                    <Pen Brush="#40C9A55A" Thickness="0.7"/>
+                                </GeometryDrawing.Pen>
+                                <GeometryDrawing.Geometry>
+                                    <GeometryGroup>
+                                        <EllipseGeometry Center="6,6"   RadiusX="3.5" RadiusY="3.5"/>
+                                        <EllipseGeometry Center="21,9"  RadiusX="2.5" RadiusY="2.5"/>
+                                        <EllipseGeometry Center="12,18" RadiusX="4"   RadiusY="4"/>
+                                        <EllipseGeometry Center="26,20" RadiusX="2"   RadiusY="2"/>
+                                    </GeometryGroup>
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Path Data="{StaticResource WaveGeometry}">
+                <Path.Fill>
+                    <LinearGradientBrush MappingMode="Absolute" StartPoint="0,20" EndPoint="0,800">
+                        <GradientStop Color="#C96F05" Offset="0"/>
+                        <GradientStop Color="#E08E0C" Offset="0.35"/>
+                        <GradientStop Color="#F2AE22" Offset="0.75"/>
+                        <GradientStop Color="#F7C43A" Offset="1"/>
+                    </LinearGradientBrush>
+                </Path.Fill>
+                <Path.RenderTransform>
+                    <TranslateTransform x:Name="BeerX"/>
+                </Path.RenderTransform>
+            </Path>
+
+            <Rectangle Canvas.Top="60" Width="1280" Height="860">
+                <Rectangle.Fill>
+                    <DrawingBrush TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,64,80"
+                          ViewboxUnits="Absolute" Viewbox="0,0,64,80"
+                          RenderOptions.CachingHint="Cache">
+                        <DrawingBrush.Transform>
+                            <TranslateTransform x:Name="BubbleAY"/>
+                        </DrawingBrush.Transform>
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing Brush="#70FFF1C0">
+                                <GeometryDrawing.Geometry>
+                                    <GeometryGroup>
+                                        <EllipseGeometry Center="10,12" RadiusX="2"   RadiusY="2"/>
+                                        <EllipseGeometry Center="42,30" RadiusX="1.4" RadiusY="1.4"/>
+                                        <EllipseGeometry Center="24,52" RadiusX="2.4" RadiusY="2.4"/>
+                                        <EllipseGeometry Center="54,68" RadiusX="1.6" RadiusY="1.6"/>
+                                        <EllipseGeometry Center="6,70"  RadiusX="1.2" RadiusY="1.2"/>
+                                    </GeometryGroup>
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Canvas.Top="60" Width="1280" Height="860">
+                <Rectangle.Fill>
+                    <DrawingBrush TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,120,160"
+                          ViewboxUnits="Absolute" Viewbox="0,0,120,160"
+                          RenderOptions.CachingHint="Cache">
+                        <DrawingBrush.Transform>
+                            <TranslateTransform x:Name="BubbleBY"/>
+                        </DrawingBrush.Transform>
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing Brush="#22FFFFFF">
+                                <GeometryDrawing.Pen>
+                                    <Pen Brush="#66FFF1C0" Thickness="0.8"/>
+                                </GeometryDrawing.Pen>
+                                <GeometryDrawing.Geometry>
+                                    <GeometryGroup>
+                                        <EllipseGeometry Center="30,25"   RadiusX="4"   RadiusY="4"/>
+                                        <EllipseGeometry Center="88,70"   RadiusX="3"   RadiusY="3"/>
+                                        <EllipseGeometry Center="50,120"  RadiusX="5"   RadiusY="5"/>
+                                        <EllipseGeometry Center="105,140" RadiusX="2.5" RadiusY="2.5"/>
+                                    </GeometryGroup>
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Canvas>
+    </Canvas>
+</UserControl>
